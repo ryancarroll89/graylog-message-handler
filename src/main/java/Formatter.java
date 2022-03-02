@@ -3,7 +3,8 @@
  */
 public interface Formatter {
 
-    /** Takes a messageGroup and formats it to new specifications.
+    /**
+     * Takes a messageGroup and formats it to new specifications.
      *
      * @param messageGroup - The messageGroup to be formatted.
      */

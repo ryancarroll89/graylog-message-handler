@@ -6,6 +6,9 @@ import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Formatter Implementation to format a MessageGroup to GELF specifications.
+ */
 public class GelfFormatterImpl implements Formatter {
     static Logger log = Logger.getLogger(GelfFormatterImpl.class.getName());
 
@@ -14,6 +17,11 @@ public class GelfFormatterImpl implements Formatter {
         addGelfFields(messageGroup);
     }
 
+    /**
+     * Takes a messageGroup and adds the required GELF formatting to each message in the group.
+     *
+     * @param messageGroup - The messages to add GELF fields to.
+     */
     private void addGelfFields(MessageGroup messageGroup) {
         JSONArray jsonArray = messageGroup.getJsonArray();
         for (int i = 0; i < jsonArray.length(); i++) {
@@ -22,6 +30,11 @@ public class GelfFormatterImpl implements Formatter {
         }
     }
 
+    /**
+     * Helper Function that takes a JSON object and adds an underscore prefix to all key names.
+     *
+     * @param jsonObject
+     */
     private void appendPrefixes(JSONObject jsonObject) {
         Set<String> keys = new HashSet<String>(jsonObject.keySet());
         for (String key : keys) {
@@ -30,6 +43,13 @@ public class GelfFormatterImpl implements Formatter {
         }
     }
 
+    /**
+     * Helper function that takes a JSON object and adds the new fields required by GELF specifications.
+     * (This information is not very meaningful, simply serving as a placeholder for this project.)
+     *
+     * @param jsonObject - The object to add GELF fields to.
+     * @param i          - The index of the message to more easily differentiate messages in Graylog UI.
+     */
     private void addGelfFields(JSONObject jsonObject, int i) {
         jsonObject.put("version", "1.1");
         jsonObject.put("host", "example.org");

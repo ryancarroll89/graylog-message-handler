@@ -12,6 +12,7 @@ public class FormatService {
     }
 
     /**
+     * Formats the messages in a message group to correct specifications.
      *
      * @param messageGroup - The group of messages to be formatted.
      */
