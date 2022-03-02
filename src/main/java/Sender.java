@@ -1,3 +1,3 @@
 public interface Sender {
-    void send(Message message);
+    void send(MessageGroup messageGroup, String host, int port);
 }

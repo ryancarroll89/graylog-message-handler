@@ -8,7 +8,7 @@ public class IngestService {
         this.ingestor = ingestor;
     }
 
-    public Message ingest(String path) {
+    public MessageGroup ingest(String path) {
         return ingestor.ingest(path);
     }
 }

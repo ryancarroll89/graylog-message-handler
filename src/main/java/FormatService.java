@@ -1,5 +1,8 @@
 import com.google.inject.Inject;
 
+/**
+ * Service class to format a MessageGroup to new specifications.
+ */
 public class FormatService {
     private Formatter formatter;
 
@@ -8,7 +11,11 @@ public class FormatService {
         this.formatter = formatter;
     }
 
-    public void format(Message message) {
-        formatter.format(message);
+    /**
+     *
+     * @param messageGroup - The group of messages to be formatted.
+     */
+    public void format(MessageGroup messageGroup) {
+        formatter.format(messageGroup);
     }
 }

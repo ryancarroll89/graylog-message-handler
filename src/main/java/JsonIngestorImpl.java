@@ -1,56 +1,49 @@
+import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
 public class JsonIngestorImpl implements Ingestor {
+    static Logger log = Logger.getLogger(JsonIngestorImpl.class.getName());
 
     @Override
-    public Message ingest(String path) {
-
-        //JSONArray array = readFile(path);
-
-//        for(int i=0; i<array.length(); i++) { // loop through the nodes
-//            JSONObject temp = array.getJSONObject(i);
-//            System.out.println(temp.get("ClientIP"));
-//        }
-
-
-        //System.out.println(readFile(path));
-        //System.out.println(json.getJSONArray("ClientDeviceType"));
-        //readFile(path);
-
-        return new Message(readFile(path));
+    public MessageGroup ingest(String path) {
+        return new MessageGroup(readFile(path));
     }
 
+    /** Reads in a file specified at path, parses the lines into JSON objects,
+     * and returns a JSON array containing all JSON objects.
+     *
+     * @param path - The path of the file to read in
+     * @return - A JSONArray of the JSON objects in the file
+     */
     private JSONArray readFile(String path) {
+        JSONArray jsonArray = new JSONArray();
+
         BufferedReader reader = null;
         try {
             reader = new BufferedReader(new FileReader(path));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        JSONArray jsonArray = new JSONArray();
-        try {
             String line = reader.readLine();
 
             while (line != null) {
                 jsonArray.put(new JSONObject(line));
                 line = reader.readLine();
             }
-            //System.out.println(jsonArray.toString());
-        } catch (Exception e){
-            e.printStackTrace();
         }
-        finally {
-            try {
-                reader.close();
-            } catch (IOException e) {
-                e.printStackTrace();
+        catch (IOException e) {
+            log.error("Exception reading file for path:" + path);
+            e.printStackTrace();
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    log.error("Exception closing file for path:" + path);
+                    e.printStackTrace();
+                }
             }
         }
         return jsonArray;
