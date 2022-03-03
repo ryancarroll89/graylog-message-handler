@@ -18,28 +18,28 @@ public class GelfFormatterImpl implements Formatter {
     }
 
     /**
-     * Takes a messageGroup and adds the required GELF formatting to each message in the group.
+     * Helper Function that takes a JSON object and adds an underscore prefix to all key names.
      *
-     * @param messageGroup - The messages to add GELF fields to.
+     * @param jsonObject - JSON object whose keys to add underscores to
      */
-    private void addGelfFields(MessageGroup messageGroup) {
-        JSONArray jsonArray = messageGroup.getJsonArray();
-        for (int i = 0; i < jsonArray.length(); i++) {
-            appendPrefixes(jsonArray.getJSONObject(i));
-            addGelfFields(jsonArray.getJSONObject(i), i);
+    public void appendPrefixes(JSONObject jsonObject) {
+        Set<String> keys = new HashSet<>(jsonObject.keySet());
+        for (String key : keys) {
+            jsonObject.put("_" + key, jsonObject.get(key));
+            jsonObject.remove(key);
         }
     }
 
     /**
-     * Helper Function that takes a JSON object and adds an underscore prefix to all key names.
+     * Takes a messageGroup and adds the required GELF formatting to each message in the group.
      *
-     * @param jsonObject
+     * @param messageGroup - The messages to add GELF fields to.
      */
-    private void appendPrefixes(JSONObject jsonObject) {
-        Set<String> keys = new HashSet<String>(jsonObject.keySet());
-        for (String key : keys) {
-            jsonObject.put("_" + key, jsonObject.get(key));
-            jsonObject.remove(key);
+    public void addGelfFields(MessageGroup messageGroup) {
+        JSONArray jsonArray = messageGroup.getJsonArray();
+        for (int i = 0; i < jsonArray.length(); i++) {
+            appendPrefixes(jsonArray.getJSONObject(i));
+            addGelfFields(jsonArray.getJSONObject(i), i);
         }
     }
 
@@ -50,7 +50,7 @@ public class GelfFormatterImpl implements Formatter {
      * @param jsonObject - The object to add GELF fields to.
      * @param i          - The index of the message to more easily differentiate messages in Graylog UI.
      */
-    private void addGelfFields(JSONObject jsonObject, int i) {
+    public void addGelfFields(JSONObject jsonObject, int i) {
         jsonObject.put("version", "1.1");
         jsonObject.put("host", "example.org");
         jsonObject.put("short_message", "A short message that helps you identify what is going on " + i);

@@ -1,5 +1,6 @@
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 
 public class GraylogMessageHandler {
@@ -10,6 +11,8 @@ public class GraylogMessageHandler {
     public static String inputFilePath;
 
     public static void main(String[] args) {
+        BasicConfigurator.configure();
+        log.info("Starting...");
         try {
             graylogHost = args[0];
             graylogPort = Integer.parseInt(args[1]);
